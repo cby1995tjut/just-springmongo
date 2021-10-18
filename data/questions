@@ -1,0 +1,4 @@
+could not install distribution gradle-bin
+
+setting - gradle -> openjdk 8 
+gradlehome -> .gradle/wrapper/dists

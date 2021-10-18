@@ -1,0 +1,12 @@
+[{
+  "_id": {
+    "$oid": "616c2e433ec5192fa13c6034"
+  },
+  "country": "china",
+  "employee": {
+    "_id": {
+      "$oid": "616c37c93ec5192fa13c603a"
+    },
+    "eid": "123"
+  }
+}]

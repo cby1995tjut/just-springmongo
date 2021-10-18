@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "616a60fd5cb41f548b59caa1"
+  },
+  "name": "davon",
+  "dept_id": {
+    "$oid": "616a61335cb41f548b59caa4"
+  },
+  "dataProvider": {
+    "dept_id": {
+      "$oid": "616a61335cb41f548b59caa4"
+    },
+    "name": "morningstar"
+  },
+  "eid": "123"
+}]

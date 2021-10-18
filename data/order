@@ -1,0 +1,11 @@
+[{
+  "_id": {
+    "$oid": "6166ebe732599042aed0081c"
+  },
+  "personName": "aaa",
+  "orderName": "o1",
+  "_class": "com.myspringmongo.mymongo.entity.Order",
+  "personId": {
+    "$oid": "6166ea1a33552805c0be7197"
+  }
+}]
