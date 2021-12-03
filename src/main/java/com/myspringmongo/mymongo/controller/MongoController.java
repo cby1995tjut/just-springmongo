@@ -1,10 +1,7 @@
 package com.myspringmongo.mymongo.controller;
 
-import com.myspringmongo.mymongo.entity.EmpDeptResult;
 import com.myspringmongo.mymongo.entity.Employee;
 import com.myspringmongo.mymongo.entity.Order;
-import com.myspringmongo.mymongo.entity.Person;
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
@@ -28,6 +25,7 @@ public class MongoController {
 
     @RequestMapping("/index")
     public String getIndex() {
+
 //        Order order =  new Order();
 //        order.setOrderName("o1");
 //        order.setPersonName("aaa");
