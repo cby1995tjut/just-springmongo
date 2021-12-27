@@ -8,6 +8,7 @@ class MymongoApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }
