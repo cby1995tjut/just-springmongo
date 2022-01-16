@@ -3,13 +3,16 @@ package netty;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.EventLoop;
 
 public class SimpleNettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        EventLoop eventExecutors = ctx.channel().eventLoop();
+        System.out.println(eventExecutors.toString() + " event loop");
         System.out.println("SimpleNettyServerHandler.channelRead");
-
+        System.out.println(Thread.currentThread().getId() + "--------");
         ByteBuf result = (ByteBuf) msg;
         byte[] bytesMsg = new byte[result.readableBytes()];
         result.readBytes(bytesMsg);

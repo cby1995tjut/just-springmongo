@@ -1,0 +1,12 @@
+## Netty 源码解读
+### 1. BossGroup 是如何把请求转发到 WorkerGroup的？
+
+服务端启动时, 会初始化两个线程组，BossGroup和WorkerGroup
+每一个线程都会单独持有NioEventLoop这个对象，该对象的父级对象实现了Runnable接口，NioEventLoop重写了Run方法,无限轮询处理请求  
+  1 当新请求为connect类型时，ServerChannel将会打开一个新的channel, 然后将这个channel通过ServerBootStrap注册到WorkerGroup(ChildGroup)中的
+子NioEventLoop的selector中(NioEventLoopGroup中的每个线程单独持有NioEventLoop对象，注意: 将channel注册到当前的NioEventLoop有加锁的操作，
+此处加锁:个人理解是为了防止长连接的同一个channel被重复注册到不同的EventLoop中)，
+一个select可以监听多个channel的读写事件，以达到多路复用的效果  
+  2 当新请求为读写事件时，会直接判断该channel是否在子EventLoopGroup中，如果是：直接调用通过该EvenLoop的Context中的channelPipeline来处理请求(channelPipeline属责任链模式,持有所有channelHandler对象)
+反之，先将该channel注册到childGroup中，再由对应的线程处理请求
+
