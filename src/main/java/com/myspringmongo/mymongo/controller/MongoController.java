@@ -2,6 +2,7 @@ package com.myspringmongo.mymongo.controller;
 
 import com.myspringmongo.mymongo.entity.Employee;
 import com.myspringmongo.mymongo.entity.Order;
+import com.myspringmongo.mymongo.service.AutoInject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
@@ -10,17 +11,18 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
 public class MongoController {
 
     private final MongoTemplate mongoTemplate;
+    private AutoInject autoInjectPrimary;
 
     @Autowired
-    public MongoController(MongoTemplate mongoTemplate) {
+    public MongoController(MongoTemplate mongoTemplate, AutoInject autoInjectPrimary) {
         this.mongoTemplate = mongoTemplate;
+        this.autoInjectPrimary = autoInjectPrimary;
     }
 
     @RequestMapping("/index")

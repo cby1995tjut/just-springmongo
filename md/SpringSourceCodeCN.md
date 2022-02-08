@@ -23,7 +23,10 @@ AOP:
 针对具体行业应用的横切行为
 
 ### 4. Spring自动装配的原理
+Spring通过反射来构造对象,有属性会先初始化属性
+resolveAutowiredArgument(ConstructorResolver) > ... determineAutowireCandidate(DefaultListableBeanFactory)
+源码请查看截图pictures/autowire.png 
+优先级 primary > priority > 最后根据属性名匹配
 
 ### 5. @RequestMapping的实现原理(根据源码讲解)
-primary > priority > name
 //todo: find the source code
