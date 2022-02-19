@@ -35,4 +35,7 @@ public class SumTwoNumbers {
         }
         return null;
     }
+
+    //todo resolve by hase map
+
 }
