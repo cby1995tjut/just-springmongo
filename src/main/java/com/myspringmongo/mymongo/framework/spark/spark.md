@@ -107,9 +107,90 @@ ApplicationMaster
 
 ### 核心概念
 #### Executor 与 Core
+Spark Executor 是集群中运行在工作节点（Worker）中的一个 JVM 进程，是整个集群中
+的专门用于计算的节点  
+在提交应用中，可以提供参数指定计算节点的个数，以及对应的资
+源。这里的资源一般指的是工作节点 Executor 的内存大小和使用的虚拟 CPU 核（Core）数
+量.
+配置Executor的数量: --num-executors
+Executor的内存大小: --executor-memory
+Executor的虚拟CPUcore数量: --executor-cores
 
+###并行度（Parallelism）
+在分布式计算框架中一般都是多个任务同时执行，由于任务分布在不同的计算节点进行
+计算，所以能够真正地实现多任务并行执行，记住，这里是并行，而不是并发。这里我们将
+整个集群并行执行任务的数量称之为并行度。那么一个作业到底并行度是多少呢？这个取决
+于框架的默认配置。应用程序也可以在运行过程中动态修改
 
+###DAG(有向无环图)
+![img.png](dag.png)
+大数据计算引擎框架我们根据使用方式的不同一般会分为四类，其中第一类就是
+Hadoop 所承载的 MapReduce,它将计算分为两个阶段，分别为 Map 阶段 和 Reduce 阶段。
+对于上层应用来说，就不得不想方设法去拆分算法，甚至于不得不在上层应用实现多个 Job
+的串联，以完成一个完整的算法，例如迭代计算。 由于这样的弊端，催生了支持 DAG 框
+架的产生。因此，支持 DAG 的框架被划分为第二代计算引擎。如 Tez 以及更上层的
+Oozie。这里我们不去细究各种 DAG 实现之间的区别，不过对于当时的 Tez 和 Oozie 来
+说，大多还是批处理的任务。接下来就是以 Spark 为代表的第三代的计算引擎。第三代计
+算引擎的特点主要是 Job 内部的 DAG 支持（不跨越 Job），以及实时计算。
+这里所谓的有向无环图，并不是真正意义的图形，而是由 Spark 程序直接映射成的数据
+流的高级抽象模型。简单理解就是将整个程序计算的执行过程用图形表示出来,这样更直观，
+更便于理解，可以用于表示程序的拓扑结构
 
+DAG（Directed Acyclic Graph）有向无环图是由点和线组成的拓扑图形，该图形具有方
+向，不会闭环
+
+### 提交流程
+![img.png](submit_progress.png)
+
+### Yarn Client 模式
+Client 模式将用于监控和调度的 Driver 模块在客户端执行，而不是在 Yarn 中，所以一
+般用于测试.
+➢ Driver 在任务提交的本地机器上运行  
+➢ Driver 启动后会和 ResourceManager 通讯申请启动 ApplicationMaster  
+➢ ResourceManager 分配 container，在合适的 NodeManager 上启动 ApplicationMaster，负
+责向 ResourceManager 申请 Executor 内存  
+➢ ResourceManager 接到 ApplicationMaster 的资源申请后会分配 container，然后
+ApplicationMaster 在资源分配指定的 NodeManager 上启动 Executor 进程  
+➢ Executor 进程启动后会向 Driver 反向注册，Executor 全部注册完成后 Driver 开始执行
+main 函数  
+➢ 之后执行到 Action 算子时，触发一个 Job，并根据宽依赖开始划分 stage，每个 stage 生
+成对应的 TaskSet，之后将 task 分发到各个 Executor 上执行
+
+###Yarn Cluster 模式
+Cluster 模式将用于监控和调度的 Driver 模块启动在 Yarn 集群资源中执行。一般应用于
+实际生产环境。
+➢ 在 YARN Cluster 模式下，任务提交后会和 ResourceManager 通讯申请启动
+ApplicationMaster  
+➢ 随后 ResourceManager 分配 container，在合适的 NodeManager 上启动 ApplicationMaster，
+此时的 ApplicationMaster 就是 Driver  
+➢ Driver 启动后向 ResourceManager 申请 Executor 内存，ResourceManager 接到
+ApplicationMaster 的资源申请后会分配 container，然后在合适的 NodeManager 上启动
+Executor 进程  
+➢ Executor 进程启动后会向 Driver 反向注册，Executor 全部注册完成后 Driver 开始执行
+main 函数  
+➢ 之后执行到 Action 算子时，触发一个 Job，并根据宽依赖开始划分 stage，每个 stage 生
+成对应的 TaskSet，之后将 task 分发到各个 Executor 上执行。
+
+### Spark 三大数据结构
+➢ RDD : 弹性分布式数据集  
+➢ 累加器：分布式共享只写变量  
+➢ 广播变量：分布式共享只读变量  
+
+###什么是 RDD
+RDD（Resilient Distributed Dataset）叫做弹性分布式数据集，是 Spark 中最基本的数据
+处理模型。代码中是一个抽象类，它代表一个弹性的、不可变、可分区、里面的元素可并行
+计算的集合  
+➢ 弹性  
+⚫ 存储的弹性：内存与磁盘的自动切换  
+⚫ 容错的弹性：数据丢失可以自动恢复  
+⚫ 计算的弹性：计算出错重试机制；  
+⚫ 分片的弹性：可根据需要重新分片  
+➢ 分布式：数据存储在大数据集群不同节点上  
+➢ 数据集：RDD 封装了计算逻辑，并不保存数据  
+➢ 数据抽象：RDD 是一个抽象类，需要子类具体实现  
+➢ 不可变：RDD 封装了计算逻辑，是不可以改变的，想要改变，只能产生新的 RDD，在
+新的 RDD 里面封装计算逻辑  
+➢ 可分区、并行计算
 
 ### 组件通信:
 Driver => Executor
