@@ -1,9 +1,5 @@
 package com.myspringmongo.mymongo.algorithm.leetcode;
-//      1、共计9个苹果，有2只猴子，一个猴子每次拿2个苹果，一个猴子每次拿3个苹果，如果剩余的苹果不够猴子每次拿的数量，则2只猴子停止拿苹果，请用java多线程模拟上面的描述，要求性能尽可能高效​
-//
-//        2、请用java实现以下shell脚本的功能（文件webx.log大于8g）
-//        cat /home/admin/logs/webx.log | grep "Login" | uniq -c | sort -nr
-//
+
 //        3、查找整数 输入：一个有序数组array，一个整数n 输出：如果n在array里，
 //        // 输出n的位置；如果n不在array中输出n可以插入的位置，插入后的数组仍然有序
 
