@@ -11,12 +11,14 @@ import scala.Char;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 public class ValidBracketsString {
     //规律，一个字符肯定是和i + 1 * n位置的字符闭合
     public static void main(String[] args) {
         String s = "()[]{}";
-        boolean valid = isValid("[({])}");
+        boolean valid = isValid("()");
+        System.out.println(valid);
     }
 
     //todo improve, test case passed 84/91
@@ -24,45 +26,20 @@ public class ValidBracketsString {
         if (s == null || s.trim().isEmpty()) {
             return true;
         }
-        int length = s.length();
-        if (length % 2 == 1) {
-            return false;
-        }
-        List<Integer> indexes = new ArrayList<>();
-
-        for (int i = 0; i < length; i++) {
-            int temp = i + 1;
-            char left = s.charAt(i);
-            int size = indexes.size();
-            boolean flag = false;
-            while (temp < length && !indexes.contains(i)) {
-                flag = true;
-                if (equals(left, s.charAt(temp))) {
-                    indexes.add(temp);
-                    break;
-                }
-
-                temp = temp + 2;
-            }
-
-            if (indexes.size() == size && flag) {
+        Stack<Character> characters = new Stack<>();
+        char[] chars = s.toCharArray();
+        for (char c: chars) {
+            if (c == '(') {
+                characters.push(')');
+            }else if (c == '{') {
+                characters.push('}');
+            } else if (c == '[') {
+                characters.push(']');
+            } else if (characters.isEmpty() || characters.pop() != c){
                 return false;
             }
         }
-        return true;
-    }
-
-    private static boolean equals(char left, char right) {
-        if (left == '(' && right == ')') {
-            return true;
-        }
-        if (left == '[' && right == ']') {
-            return true;
-        }
-        if (left == '{' && right == '}') {
-            return true;
-        }
-        return false;
+        return characters.isEmpty();
     }
 
 
