@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Stack;
 
 public class ValidBracketsString {
-    //规律，一个字符肯定是和i + 1 * n位置的字符闭合
+    //栈， 当为左括号时, 存放右括号，当为右括号时，取出栈顶元素进行比较
     public static void main(String[] args) {
         String s = "()[]{}";
         boolean valid = isValid("()");
