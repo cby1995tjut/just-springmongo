@@ -14,6 +14,18 @@ import java.util.List;
  */
 public class MergeSortedList {
 
+//    执行用时：
+//            0 ms
+//, 在所有 Java 提交中击败了
+//100.00%
+//    的用户
+//    内存消耗：
+//            40.6 MB
+//, 在所有 Java 提交中击败了
+//25.71%
+//    的用户
+//    通过测试用例：
+//            208 / 208
     public static void main(String[] args) {
         ListNode listNode1 = new ListNode(1);
         ListNode listNode2 = new ListNode(1);
