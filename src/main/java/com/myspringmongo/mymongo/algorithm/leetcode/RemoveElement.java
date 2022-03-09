@@ -10,19 +10,14 @@ public class RemoveElement {
     }
 
     public static int removeElement(int[] nums, int val) {
-        if (nums == null || nums.length == 0) {
-            return 0;
+        int result = 0;
+        //遍历，当当前元素不是val时，就将其放入原数组中
+        for (int num: nums) {
+            if (num != val) {
+                nums[result] = num;
+                result++;
+            }
         }
-        int result = nums.length;
-
-//        for (int i = 0; i < nums.length; i++) {
-//            if (nums[i] == val) {
-//                result--;
-//                nums[i] = nums[i + 1];
-//                nums[i + 1] = 0
-//                i--;
-//            }
-//        }
 
         return result;
     }
