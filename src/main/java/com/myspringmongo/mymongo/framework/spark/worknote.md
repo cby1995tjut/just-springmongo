@@ -1,0 +1,5 @@
+1.最近在做spark集群解析
+xml的需求,发现当引入第三方包时，会导致spark和scala一些依赖包冲突
+包冲突的问题发生在本地运行的scala项目时,spark driver提交的是job,本地和远程都会对spark和scala相关的类进行序列化和反序列化  
+
+具体问题:引入spark-xml解析xml文件时报版本序列化id不兼容.
