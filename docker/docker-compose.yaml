@@ -10,3 +10,18 @@ services:
       - /home/${USER}/mongodb/data:/data/db
     ports:
       - '27017:27017'
+  redis:
+    image: redis:alpine3.13
+    container_name: docker_redis
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 4G
+        reservations:
+          cpus: "0.25"
+          memory: 1G
+    volumes:
+      - /home/${USER}/redis/data:/data
+    ports:
+      - 6379:6379
