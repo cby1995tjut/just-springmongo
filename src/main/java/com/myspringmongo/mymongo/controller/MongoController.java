@@ -3,6 +3,7 @@ package com.myspringmongo.mymongo.controller;
 import com.myspringmongo.mymongo.entity.Employee;
 import com.myspringmongo.mymongo.entity.Order;
 import com.myspringmongo.mymongo.service.AutoInject;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class MongoController {
@@ -87,6 +89,18 @@ public class MongoController {
 
         Aggregation aggregation = Aggregation.newAggregation(Aggregation.match(Criteria.where("_id").is("616a60fd5cb41f548b59caa1")) , lookupOperation);
         List<Employee> results = mongoTemplate.aggregate(aggregation, "employee", Employee.class).getMappedResults();
+        return "aaa";
+    }
+
+    @RequestMapping("/max")
+    public String getMax() {
+        Criteria criteria = Criteria.where("personName").is("aaa");
+        GroupOperation groupMaxOperation = Aggregation.group().max("batchNumber").as("maxBatchNumber");
+
+        AggregationResults<Document> aggregate = mongoTemplate.aggregate(Aggregation.newAggregation(new MatchOperation(criteria),groupMaxOperation), Order.class, Document.class);
+
+        Optional<Long> maxLastUpdatedTime = Optional.ofNullable(aggregate.getUniqueMappedResult())
+                .map(result -> result.get("maxBatchNumber", Long.class));
         return "aaa";
     }
 }
